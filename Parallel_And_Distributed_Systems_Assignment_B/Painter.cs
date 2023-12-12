@@ -23,15 +23,18 @@ namespace Parallel_And_Distributed_Systems_Assignment_B
             Id = id;
         }
 
-
+        //Painting the Circle and adding it as painted in the painters own dictionary
         public void PaintCircle(Circle circle)
         {
             CirclesPool[circle] = true;
             Thread.Sleep(20);
             Console.ForegroundColor = color;
+
+            //Display the circle in a different color and put the ID of the painted inside it for statistics.
             Console.Write("{" + $"{Id}" +"}");
         }
 
+        //VERY IMPORTANT! Check each other painters list of painted circles.
         public bool IsCirclePainted(List<Painter> painters, Circle circle)
         {
             foreach (var painter in painters)
