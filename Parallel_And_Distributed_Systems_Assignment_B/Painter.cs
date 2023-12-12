@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,22 +11,25 @@ namespace Parallel_And_Distributed_Systems_Assignment_B
     internal class Painter
     {
         public int Id { get; set; }
-        public Dictionary<Circle, bool> CirclesPool { get; set; }
 
-        public Painter(Dictionary<Circle, bool> _CirclesPool, int id)
+        ConsoleColor color { get; set; }
+        public ConcurrentDictionary<Circle, bool> CirclesPool { get; set; }
+
+        public Painter(ConcurrentDictionary<Circle, bool> _CirclesPool, int id)
         {
+            Random random = new Random();
             this.CirclesPool = _CirclesPool;
+            color = (ConsoleColor)random.Next(1,15);
             Id = id;
         }
 
-        
-        public void PaintCircle(Circle circle, SemaphoreSlim locker)
+
+        public void PaintCircle(Circle circle)
         {
-            locker.Wait();
             CirclesPool[circle] = true;
             Thread.Sleep(20);
-            Console.WriteLine($"Painting a circle {circle.Id} right now by painter {Id}...");
-            locker.Release();
+            Console.ForegroundColor = color;
+            Console.Write("{" + $"{Id}" +"}");
         }
 
         public bool IsCirclePainted(List<Painter> painters, Circle circle)
